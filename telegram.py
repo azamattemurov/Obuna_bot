@@ -2,13 +2,13 @@ import time
 from telebot import TeleBot, types
 
 # Bot token va kanal nomini o'zgartiring
-TOKEN = '8199385102:AAFhaXp-lQAlPDMyQvBpbPr3JuLkawbL97Y'
+TOKEN = '7832435136:AAH100TOWQqq09BgWqWDM9l6X3-rw2vz5Tw'
 CHANNEL_USERNAME = "@T1murov_19"
 YOUTUBE_LINK = "https://www.youtube.com/@T1murov"  # YouTube havolasi
 
 bot = TeleBot(TOKEN)
 
-# Obuna tekshirish uchun tugmalarni yuborish
+
 @bot.message_handler(commands=['start'])
 def send_welcome_message(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
