@@ -1,50 +1,65 @@
 import time
 from telebot import TeleBot, types
 
-token = '7460636843:AAE5k7ZKL8_tWgALM-Y2sZMQ3EyXIpkF83w'
-bot = TeleBot(token)
-channel = "@t1murov_19"
+# Bot token va kanal nomini o'zgartiring
+TOKEN = '8199385102:AAFhaXp-lQAlPDMyQvBpbPr3JuLkawbL97Y'
+CHANNEL_USERNAME = "@T1murov_19"
+YOUTUBE_LINK = "https://www.youtube.com/@T1murov"  # YouTube havolasi
 
-audio_file = 'music/Ne sabab.mp3'
+bot = TeleBot(TOKEN)
 
-
+# Obuna tekshirish uchun tugmalarni yuborish
 @bot.message_handler(commands=['start'])
-def start(msg: types.Message):
-    markup = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton("1-Kanal", url="https://t.me/t1murov_19")
-    button2 = types.InlineKeyboardButton("Tasdiqlash ✅", callback_data="checksub")
-    markup.add(button1, button2)
-    bot.send_message(msg.chat.id, "Kanalimizga obuna bo'ling va O'ylab ko'rni - 2 ni eshiting 🔊", reply_markup=markup)
+def send_welcome_message(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    channel_button = types.InlineKeyboardButton("📢 Kanalga o'tish", url=f"https://t.me/{CHANNEL_USERNAME[1:]}")
+    check_button = types.InlineKeyboardButton("✅ Tasdiqlash", callback_data='check_subscription')
+    markup.add(channel_button, check_button)
 
+    bot.send_message(
+        message.chat.id,
+        "👋 Assalomu alaykum!\n\n📢 Iltimos, kanalimizga obuna bo'ling va tasdiqlash tugmasini bosing.",
+        reply_markup=markup
+    )
 
-
-@bot.callback_query_handler(func=lambda call: call.data == 'checksub')
-def callback_check_subscription(call: types.CallbackQuery):
+# Obuna holatini tekshirish va natijani yuborish
+@bot.callback_query_handler(func=lambda call: call.data == 'check_subscription')
+def check_subscription(call):
     try:
-        checkuser = bot.get_chat_member(channel, call.from_user.id).status
-        if checkuser in ['member', 'administrator', 'creator']:
-            time.sleep(3)
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                                  text="Tasdiqlaganingiz uchun rahmat 🥳 \n "
-                                       "Sizga 10 soniyada premyera tashlanadi ⏳", reply_markup=None)
-            time.sleep(4)
-            bot.send_audio(call.message.chat.id, audio=open(audio_file, 'rb'), protect_content=True)
-            bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
-            bot.send_message(call.message.chat.id,
-                             "Hozircha Ne sabab ni eshitib turishingiz mumkin hali chiqmadi 😂 \n"
-                             "\nBizdan uzoqlashmang 🫴🏻 https://t.me/t1murov_19",
-                             protect_content=True)
+        user_status = bot.get_chat_member(CHANNEL_USERNAME, call.from_user.id).status
+        if user_status in ['member', 'administrator', 'creator']:
+            # Agar obuna bo'lgan bo'lsa
+            bot.edit_message_text(
+                "✅ Tasdiqlash muvaffaqiyatli!\n\n🎥 Mana Premyera shu yerda :",
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=None
+            )
+            bot.send_message(call.message.chat.id, f"👉 {YOUTUBE_LINK}")
         else:
-            bot.send_message(call.message.chat.id,
-                             "Siz hali kanalimizga obuna bo'lmadingiz. Obuna bo'ling va qayta tasdiqlang.",
-                             protect_content=True)
+            # Agar obuna bo'lmagan bo'lsa
+            ask_to_subscribe(call.message)
     except Exception as e:
-        bot.send_message(call.message.chat.id, "Xatolik yuz berdi: {}".format(str(e)), protect_content=True)
+        bot.send_message(call.message.chat.id, f"❌ Xatolik yuz berdi: {e}")
 
+# Obuna bo'lmaganlarga xabar yuborish
+def ask_to_subscribe(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    channel_button = types.InlineKeyboardButton("📢 Kanalga o'tish", url=f"https://t.me/{CHANNEL_USERNAME[1:]}")
+    check_button = types.InlineKeyboardButton("✅ Qayta tasdiqlash", callback_data='check_subscription')
+    markup.add(channel_button, check_button)
 
-@bot.message_handler(content_types=['document', 'photo', 'video'])
-def handle_unsupported_content(msg: types.Message):
-    bot.send_message(msg.chat.id, "Bu turdagi fayllarni qabul qilmayman. Faqat audio fayl yuboriladi.", protect_content=True)
+    bot.edit_message_text(
+        "❌ Siz hali kanalimizga obuna bo'lmadingiz.\n\n📢 Iltimos, obuna bo'ling va qayta tasdiqlash tugmasini bosing.",
+        chat_id=message.chat.id,
+        message_id=message.message_id,
+        reply_markup=markup
+    )
 
-
-bot.polling()
+# Botni ishga tushirish
+while True:
+    try:
+        bot.polling(timeout=20, long_polling_timeout=20)
+    except Exception as e:
+        print(f"Xatolik yuz berdi: {e}")
+        time.sleep(15)
