@@ -30,7 +30,7 @@ def check_subscription(call):
         if user_status in ['member', 'administrator', 'creator']:
             # Agar obuna bo'lgan bo'lsa
             bot.edit_message_text(
-                "✅ Tasdiqlash muvaffaqiyatli!\n\n🎥 Mana Premyera shu yerda :",
+                "✅ Tasdiqlash muvaffaqiyatli!\n\nMana shu link da Premyera 👇🏻",
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=None
