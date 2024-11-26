@@ -18,7 +18,7 @@ def send_welcome_message(message):
 
     bot.send_message(
         message.chat.id,
-        "👋 Assalomu alaykum!\n\n📢 Iltimos, kanalimizga obuna bo'ling va tasdiqlash tugmasini bosing.",
+        "Ber Habar premyerani eshitish uchun 👇🏻 \n\n📢 Iltimos, kanalimizga obuna bo'ling va tasdiqlash tugmasini bosing.",
         reply_markup=markup
     )
 
@@ -35,7 +35,7 @@ def check_subscription(call):
                 message_id=call.message.message_id,
                 reply_markup=None
             )
-            bot.send_message(call.message.chat.id, f"👉 {YOUTUBE_LINK}")
+            bot.send_message(call.message.chat.id, f" {YOUTUBE_LINK}")
         else:
             # Agar obuna bo'lmagan bo'lsa
             ask_to_subscribe(call.message)
