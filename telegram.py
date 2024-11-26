@@ -12,7 +12,7 @@ bot = TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def send_welcome_message(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
-    channel_button = types.InlineKeyboardButton("📢 Kanalga o'tish", url=f"https://t.me/{CHANNEL_USERNAME[1:]}")
+    channel_button = types.InlineKeyboardButton("📢 Kanalga obuna bo'ling", url=f"https://t.me/{CHANNEL_USERNAME[1:]}")
     check_button = types.InlineKeyboardButton("✅ Tasdiqlash", callback_data='check_subscription')
     markup.add(channel_button, check_button)
 
