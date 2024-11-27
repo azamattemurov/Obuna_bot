@@ -4,7 +4,7 @@ from telebot import TeleBot, types
 # Bot token va kanal nomini o'zgartiring
 TOKEN = '7832435136:AAH100TOWQqq09BgWqWDM9l6X3-rw2vz5Tw'
 CHANNEL_USERNAME = "@T1murov_19"
-YOUTUBE_LINK = "https://linktw.in/xEhTQe"  # YouTube havolasi
+YOUTUBE_LINK = "https://linktw.in/reVyqY"  # YouTube havolasi
 
 bot = TeleBot(TOKEN)
 
